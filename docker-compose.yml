@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  psql:
+    image: bitnami/postgresql:latest
+    ports:
+      - 5432:5432
+    volumes:
+      - psql-data:/bitnami/postgresql
+      - ./pg_hba.conf:/bitnami/postgresql/conf/pg_hba.conf
+      - ./certs/ca.crt:/opt/bitnami/postgresql/certs/ca.crt
+      - ./server/server.crt:/opt/bitnami/postgresql/certs/server.crt
+      - ./server/server.key:/opt/bitnami/postgresql/certs/server.key
+
+    environment:
+      BITNAMI_DEBUG: 'true'
+      # basic
+      POSTGRESQL_USERNAME: my_user
+      POSTGRESQL_PASSWORD: password123
+      POSTGRESQL_DATABASE: my_database
+      # ssl
+      POSTGRESQL_ENABLE_TLS: 'yes'
+      POSTGRESQL_TLS_CERT_FILE: /opt/bitnami/postgresql/certs/server.crt
+      POSTGRESQL_TLS_KEY_FILE: /opt/bitnami/postgresql/certs/server.key
+      POSTGRESQL_TLS_CA_FILE: /opt/bitnami/postgresql/certs/ca.crt
+
+volumes:
+  psql-data:
